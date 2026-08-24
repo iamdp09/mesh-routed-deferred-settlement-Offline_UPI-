@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "accounts")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class Account {
 
@@ -26,5 +25,10 @@ public class Account {
     @Version
     private Long version; // for optimistic locking concurrent updates/transfers
 
+    public Account(String vpa, String holderName, BigDecimal balance) {
+        this.vpa = vpa;
+        this.holderName = holderName;
+        this.balance = balance;
+    }
 }
 
