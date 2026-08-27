@@ -4,6 +4,7 @@ import com.dp.project.offlineupidemo.model.PaymentInstruction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -36,6 +37,7 @@ import java.util.Base64;
  * causes decryption to fail with an exception. This is what makes it safe for
  * untrusted intermediates to hold.
  */
+@Service
 public class HybridCryptoService {
 
     private static final String RSA_TRANSFORMATION = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
@@ -78,7 +80,7 @@ public class HybridCryptoService {
         Cipher rsa = Cipher.getInstance(RSA_TRANSFORMATION);
         OAEPParameterSpec oaep = new OAEPParameterSpec(
                 "SHA-256",
-                "MGM1",
+                "MGF1",
                 MGF1ParameterSpec.SHA256,
                 PSource.PSpecified.DEFAULT
         );

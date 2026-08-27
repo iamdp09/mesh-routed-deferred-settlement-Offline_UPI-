@@ -2,6 +2,7 @@ package com.dp.project.offlineupidemo.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * This is what kills the "three bridges deliver simultaneously" problem.
  * ConcurrentHashMap.putIfAbsent is the JVM-local equivalent of Redis SETNX.
  */
+@Service
 public class IdempotencyService {
     private final Map<String, Instant> seen = new ConcurrentHashMap<>();
 

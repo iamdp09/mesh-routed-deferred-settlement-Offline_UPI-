@@ -1,6 +1,7 @@
 package com.dp.project.offlineupidemo.service;
 
 import com.dp.project.offlineupidemo.model.MeshPacket;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentMap;
  * In the real system, this state would be on a physical Android device,
  * with packets exchanged via BLE GATT characteristics.
  */
+
 public class VirtualDevice {
 
     private final String deviceId;

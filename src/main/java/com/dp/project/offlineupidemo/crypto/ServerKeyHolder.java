@@ -4,6 +4,7 @@ package com.dp.project.offlineupidemo.crypto;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -21,6 +22,7 @@ import java.util.Base64;
  * exposed via /api/server-key so the (simulated) sender devices can use it to
  * encrypt payloads.
  */
+@Component
 public class ServerKeyHolder {
 
     private static final Logger log = LoggerFactory.getLogger(ServerKeyHolder.class);

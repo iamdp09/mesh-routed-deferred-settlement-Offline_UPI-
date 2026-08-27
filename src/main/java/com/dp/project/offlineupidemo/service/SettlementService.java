@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dp.project.offlineupidemo.enums.Status;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -36,6 +37,7 @@ public class SettlementService {
     @Autowired
     private TransactionRepository transactions;
 
+    @Transactional
     public Transaction settle(PaymentInstruction instruction,
                               String packetHash,  String bridgeNodeId, int hopCount){
 

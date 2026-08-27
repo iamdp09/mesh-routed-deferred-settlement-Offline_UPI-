@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UPI Offline Mesh — Demo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+        :root {
+            --bg: #f6f8fb;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --ink: #101828;
+            --muted: #667085;
+            --line: #e4e7ec;
+            --primary: #5b3df5;
+            --primary-dark: #4930d0;
+            --primary-soft: #f0edff;
+            --green: #12b76a;
+            --green-soft: #ecfdf3;
+            --red: #f04438;
+            --red-soft: #fef3f2;
+            --amber: #f79009;
+            --amber-soft: #fffaeb;
+            --shadow: 0 8px 28px rgba(16, 24, 40, .06);
+            --shadow-hover: 0 14px 34px rgba(16, 24, 40, .10);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 90% 0%, rgba(91,61,245,.09), transparent 28%),
+                var(--bg);
+            color: var(--ink);
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 30px 24px 48px;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-mark {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--primary), #7957ff);
+            color: #fff;
+            font-size: 24px;
+            box-shadow: 0 8px 18px rgba(91,61,245,.25);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(25px, 3vw, 34px);
+            letter-spacing: -.8px;
+        }
+
+        h2 {
+            margin: 0 0 16px;
+            font-size: 17px;
+            letter-spacing: -.2px;
+        }
+
+        h3 {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .small {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .hero-copy .small {
+            margin: 5px 0 0;
+            max-width: 720px;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+
+        .card, .controls {
+            background: rgba(255,255,255,.94);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .controls {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .controls-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .flow-step {
+            padding: 16px;
+            border: 1px solid var(--line);
+            background: var(--surface-soft);
+            border-radius: 14px;
+            margin-top: 10px;
+        }
+
+        .flow-step:first-of-type { margin-top: 0; }
+
+        .step-title {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .field-label {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 700;
+            margin-left: 2px;
+            margin-bottom: -2px;
+        }
+
+        select, input {
+            height: 40px;
+            margin: 0;
+            border: 1px solid #d0d5dd;
+            border-radius: 10px;
+            padding: 0 11px;
+            background: #fff;
+            color: var(--ink);
+            font: inherit;
+            outline: none;
+            transition: border .15s, box-shadow .15s;
+        }
+
+        select:focus, input:focus {
+            border-color: #9b8afb;
+            box-shadow: 0 0 0 4px rgba(91,61,245,.10);
+        }
+
+        button {
+            min-height: 40px;
+            border: 0;
+            border-radius: 10px;
+            padding: 0 15px;
+            cursor: pointer;
+            font: 700 13px 'DM Sans', sans-serif;
+            color: #fff;
+            background: var(--primary);
+            box-shadow: 0 4px 10px rgba(91,61,245,.18);
+            transition: transform .15s, background .15s, box-shadow .15s;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 7px 16px rgba(91,61,245,.22);
+        }
+
+        button.secondary {
+            background: #fff;
+            color: var(--primary-dark);
+            border: 1px solid #d9d3ff;
+            box-shadow: none;
+        }
+
+        button.secondary:hover {
+            background: var(--primary-soft);
+        }
+
+        button.danger {
+            background: #fff;
+            color: var(--red);
+            border: 1px solid #fecdca;
+            box-shadow: none;
+        }
+
+        button.danger:hover {
+            background: var(--red-soft);
+        }
+
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-2 {
+            grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+        }
+
+        .card {
+            padding: 20px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+
+        .heading-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .device {
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            padding: 13px;
+            margin-bottom: 9px;
+            background: #fff;
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .device:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 16px rgba(16,24,40,.06);
+        }
+
+        .device.bridge {
+            border-color: #b7ebd0;
+            background: var(--green-soft);
+        }
+
+        .device.offline {
+            background: var(--surface-soft);
+        }
+
+        .device-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .device-name {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-weight: 800;
+        }
+
+        .badge-online { background: #d1fadf; color: #067647; }
+        .badge-offline { background: #eaecf0; color: #475467; }
+
+        .packet-id {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 10px;
+            background: #f2f4f7;
+            color: #475467;
+            padding: 4px 7px;
+            border-radius: 6px;
+            margin: 5px 3px 0 0;
+            display: inline-block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+            overflow: hidden;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 10px;
+            border-bottom: 1px solid #eef0f3;
+            white-space: nowrap;
+        }
+
+        th {
+            color: #667085;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            font-weight: 800;
+            background: #f8fafc;
+        }
+
+        th:first-child { border-radius: 9px 0 0 0; }
+        th:last-child { border-radius: 0 9px 0 0; }
+
+        tbody tr:hover td {
+            background: #fafbff;
+        }
+
+        .balance {
+            font-variant-numeric: tabular-nums;
+            color: #079455;
+            font-weight: 800;
+        }
+
+        .status-SETTLED {
+            color: #067647;
+            background: var(--green-soft);
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .status-REJECTED, .status-INVALID {
+            color: #b42318;
+            background: var(--red-soft);
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .status-DUPLICATE_DROPPED {
+            color: #b54708;
+            background: var(--amber-soft);
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        #log {
+            min-height: 120px;
+            max-height: 240px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #d0d5dd;
+            background: #101828;
+            color: #a6f4c5;
+            font: 11px/1.65 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .ledger, .activity {
+            margin-top: 20px;
+        }
+
+        .cache-chip {
+            display: inline-flex;
+            padding: 6px 9px;
+            border-radius: 8px;
+            background: #f2f4f7;
+            color: #667085;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 900px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .hero { align-items: flex-start; }
+        }
+
+        @media (max-width: 620px) {
+            .container { padding: 20px 14px 35px; }
+            .hero { flex-direction: column; }
+            .form-row { align-items: stretch; }
+            select, input, button { width: 100% !important; }
+            .arrow { display: none; }
+            .card, .controls { padding: 15px; }
+            .grid-2 { gap: 14px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="hero">
+        <div class="brand">
+            <div class="hero-copy">
+                <h1>UPI Offline Mesh</h1>
+                <p class="small">Live payment-routing demo • encrypted packets move phone-to-phone until a bridge reaches the backend.</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="controls">
+        <div class="controls-header">
+            <div>
+                <h3>Payment flow</h3>
+                <div class="small">Simulate the complete offline payment journey</div>
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <div class="step-title"><strong>Compose payment</strong><span class="small">simulates sender phone</span></div>
+            <div class="form-row">
+                <select id="senderVpa">
+                    <option>alice@demo</option>
+                    <option>bob@demo</option>
+                    <option>carol@demo</option>
+                </select>
+                →
+                <select id="receiverVpa">
+                    <option>bob@demo</option>
+                    <option>carol@demo</option>
+                    <option>alice@demo</option>
+                    <option>dave@demo</option>
+                </select>
+                ₹<input type="number" id="amount" value="500" style="width: 100px">
+                PIN <input type="text" id="pin" value="1234" style="width: 80px" maxlength="4">
+                <button onclick="sendPacket()">Send to mesh</button>
+            </div>
+        </div>
+
+        <div class="flow-step">
+            <div class="step-title"><strong>Gossip</strong><span class="small">packets hop device-to-device</span></div>
+            <button class="secondary" onclick="gossip()"> Run gossip round</button>
+        </div>
+
+        <div class="flow-step">
+            <div class="step-title"><strong>Bridge upload</strong><span class="small">a 4G node reaches the backend</span></div>
+            <button class="secondary" onclick="flushBridges()"> Upload bridge packets</button>
+            <span class="small">(parallel — exercises idempotency)</span>
+        </div>
+
+        <div style="margin-top:14px">
+            <button class="danger" onclick="resetMesh()">Reset mesh + cache</button>
+        </div>
+    </div>
+
+    <div class="grid grid-2">
+        <div class="card">
+            <div class="section-heading">
+                <div class="heading-left"><h2>Mesh devices</h2></div>
+                <span class="cache-chip">live topology</span>
+            </div>
+            <div id="devices"></div>
+        </div>
+
+        <div class="card">
+            <div class="section-heading">
+                <div class="heading-left"><h2>Account balances</h2></div>
+            </div>
+            <table id="accounts-table">
+                <thead><tr><th>VPA</th><th>Holder</th><th>Balance</th></tr></thead>
+                <tbody></tbody>
+            </table>
+            <p class="small" id="cacheInfo"></p>
+        </div>
+    </div>
+
+    <div class="card ledger">
+        <div class="section-heading">
+            <div class="heading-left"><h2>Transaction ledger</h2></div>
+        </div>
+        <table id="tx-table">
+            <thead><tr>
+                <th>ID</th><th>From</th><th>To</th><th>Amount</th>
+                <th>Status</th><th>Bridge</th><th>Hops</th><th>Settled</th>
+            </tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="card activity">
+        <div class="section-heading">
+            <div class="heading-left"><h2>Activity log</h2></div>
+        </div>
+        <div id="log"></div>
+    </div>
+</div>
+
+<script>
+    function log(msg) {
+        const el = document.getElementById('log');
+        el.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg + '\n' + el.textContent;
+    }
+
+    async function refresh() {
+        // Mesh state
+        const m = await fetch('/api/mesh/state').then(r => r.json());
+        const devicesDiv = document.getElementById('devices');
+        devicesDiv.innerHTML = m.devices.map(d => `
+            <div class="device ${d.hasInternet ? 'bridge' : 'offline'}">
+                <div class="device-top">
+                    <span class="device-name">${d.deviceId}</span>
+                    <span class="badge ${d.hasInternet ? 'badge-online' : 'badge-offline'}">
+                        ${d.hasInternet ? '● 4G BRIDGE' : '● OFFLINE'}
+                    </span>
+                </div>
+                <div class="small" style="margin-top:6px">Holding ${d.packetCount} packet(s)</div>
+                <div>${d.packetIds.map(id => `<span class="packet-id">${id}</span>`).join('')}</div>
+            </div>
+        `).join('');
+        document.getElementById('cacheInfo').textContent =
+            `Idempotency cache size: ${m.idempotencyCacheSize}`;
+
+        // Accounts
+        const accs = await fetch('/api/accounts').then(r => r.json());
+        document.querySelector('#accounts-table tbody').innerHTML = accs.map(a => `
+            <tr><td>${a.vpa}</td><td>${a.holderName}</td>
+                <td class="balance">₹${parseFloat(a.balance).toFixed(2)}</td></tr>
+        `).join('');
+
+        // Transactions
+        const txs = await fetch('/api/transactions').then(r => r.json());
+        document.querySelector('#tx-table tbody').innerHTML = txs.map(t => `
+            <tr>
+                <td>${t.id}</td><td>${t.senderVpa}</td><td>${t.receiverVpa}</td>
+                <td class="balance">₹${parseFloat(t.amount).toFixed(2)}</td>
+                <td class="status-${t.status}">${t.status}</td>
+                <td>${t.bridgeNodeId}</td><td>${t.hopCount}</td>
+                <td class="small">${new Date(t.settledAt).toLocaleTimeString()}</td>
+            </tr>
+        `).join('');
+    }
+
+    async function sendPacket() {
+        const body = {
+            senderVpa: document.getElementById('senderVpa').value,
+            receiverVpa: document.getElementById('receiverVpa').value,
+            amount: parseFloat(document.getElementById('amount').value),
+            pin: document.getElementById('pin').value,
+            ttl: 5,
+            startDevice: 'phone-alice'
+        };
+        const r = await fetch('/api/demo/send', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(body)
+        }).then(r => r.json());
+        log(` Packet ${r.packetId.substring(0,8)} encrypted & injected at ${r.injectedAt} (TTL ${r.ttl})`);
+        log(`   ciphertext (truncated): ${r.ciphertextPreview}`);
+        refresh();
+    }
+
+    async function gossip() {
+        const r = await fetch('/api/mesh/gossip', {method: 'POST'}).then(r => r.json());
+        log(` Gossip: ${r.transfers} transfer(s) — ${JSON.stringify(r.deviceCounts)}`);
+        refresh();
+    }
+
+    async function flushBridges() {
+        const r = await fetch('/api/mesh/flush', {method: 'POST'}).then(r => r.json());
+        log(` ${r.uploadsAttempted} bridge upload(s):`);
+        r.results.forEach(res => {
+            log(`   ${res.bridgeNode} packet ${res.packetId} → ${res.outcome}` +
+                (res.reason ? ` (${res.reason})` : ''));
+        });
+        refresh();
+    }
+
+    async function resetMesh() {
+        await fetch('/api/mesh/reset', {method: 'POST'});
+        log(' mesh + idempotency cache cleared');
+        refresh();
+    }
+
+    refresh();
+    setInterval(refresh, 3000);
+</script>
+</body>
+</html>
+

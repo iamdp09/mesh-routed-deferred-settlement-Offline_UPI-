@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
@@ -23,6 +24,7 @@ import java.time.Instant;
  *   4. Check freshness — reject if signedAt is too old (replay protection).
  *   5. Hand off to SettlementService for the actual debit/credit.
  */
+@Service
 public class BridgeIngestionService {
 
 
