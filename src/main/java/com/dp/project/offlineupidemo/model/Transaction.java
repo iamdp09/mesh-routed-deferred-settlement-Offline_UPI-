@@ -4,6 +4,7 @@ import com.dp.project.offlineupidemo.enums.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -20,6 +21,7 @@ import java.time.Instant;
                             unique = true) })
 @NoArgsConstructor
 @Getter
+@Setter
 public class Transaction {
 
     @Id
@@ -53,5 +55,4 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
-
 }
